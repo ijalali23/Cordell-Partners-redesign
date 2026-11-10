@@ -1,0 +1,24 @@
+name: Validate
+
+# Development checks: run on develop pushes and on PRs into main.
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sanity checks
+        run: |
+          set -e
+          test -f index.html
+          grep -q "<title>" index.html
+          # dev-only design notes must not ship
+          if grep -q 'class="note"' index.html; then echo "design notes present"; exit 1; fi
+          # no em/en dashes
+          if grep -qP '[\x{2013}\x{2014}]' index.html; then echo "em/en dash found"; exit 1; fi
+          echo "All checks passed"

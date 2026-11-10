@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Cordell Partners Site Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #f4f4f1;
+  --surface: #ffffff;
+  --text: #121a1d;
+  --muted: #56636a;
+  --line: #dcdedb;
+  --accent: #8c6a36;
+  --accent-bg: #f3ead9;
+  --crit: #b03a2e; --crit-bg: #f8e3e0;
+  --high: #a8620f; --high-bg: #f9ecd9;
+  --med: #3d6f6a; --med-bg: #e0eeec;
+  --low: #5a646b; --low-bg: #eceeee;
+  --display: "Bodoni Moda", Georgia, serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0d1417; --surface: #142026; --text: #ecece7; --muted: #95a2a6; --line: #263439;
+    --accent: #d2ad73; --accent-bg: #2a2418;
+    --crit: #f08a7e; --crit-bg: #3a1f1c; --high: #eaa857; --high-bg: #35281a; --med: #8cc3bd; --med-bg: #16302e; --low: #a9b3b8; --low-bg: #1f2a2f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1417; --surface: #142026; --text: #ecece7; --muted: #95a2a6; --line: #263439;
+  --accent: #d2ad73; --accent-bg: #2a2418;
+  --crit: #f08a7e; --crit-bg: #3a1f1c; --high: #eaa857; --high-bg: #35281a; --med: #8cc3bd; --med-bg: #16302e; --low: #a9b3b8; --low-bg: #1f2a2f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 1rem/1.6 var(--body); padding-inline: 16px; -webkit-font-smoothing: antialiased; }
+main { max-width: 960px; margin-inline: auto; padding-block: 56px 96px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.05; letter-spacing: -0.015em; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.15; margin-bottom: 18px; }
+h3 { font-size: 1.2rem; line-height: 1.3; }
+p { margin: 0 0 14px; max-width: 70ch; }
+a { color: var(--accent); }
+.kicker { font: 500 0.72rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.meta { font: 400 0.8rem/1.5 var(--mono); color: var(--muted); margin-top: 18px; }
+header { display: grid; gap: 16px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+section { padding-block: 44px; border-bottom: 1px solid var(--line); }
+section:last-child { border-bottom: 0; }
+.lede { font-size: 1.15rem; color: var(--muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: var(--text); color: var(--bg); text-decoration: none; font-weight: 600; font-size: 0.93rem; }
+
+.score { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 8px; }
+.score div { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 6px; }
+.score span { font: 400 0.7rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.score b { font: 600 1.6rem/1 var(--display); }
+.score small { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+.grade-c { color: var(--high); } .grade-d { color: var(--crit); } .grade-b { color: var(--med); }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 0.7rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+td:first-child { font-weight: 600; white-space: nowrap; }
+code { font: 400 0.85em/1.4 var(--mono); background: var(--bg); padding: 1px 5px; border-radius: 3px; }
+
+.findings { display: grid; gap: 10px; }
+.finding { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px; }
+.finding p { margin: 6px 0 0; color: var(--muted); font-size: 0.95rem; }
+.finding .fix { color: var(--text); }
+.finding .fix::before { content: "Fix: "; font-weight: 600; }
+.sev { align-self: start; justify-self: start; font: 500 0.66rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 8px; border-radius: 4px; }
+.sev-crit { color: var(--crit); background: var(--crit-bg); }
+.sev-high { color: var(--high); background: var(--high-bg); }
+.sev-med { color: var(--med); background: var(--med-bg); }
+.sev-low { color: var(--low); background: var(--low-bg); }
+.group-label { font: 500 0.72rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 26px 0 10px; }
+
+.callout { background: var(--accent-bg); border-radius: 6px; padding: 16px 18px; font-size: 0.95rem; }
+.callout p:last-child { margin-bottom: 0; }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px; }
+.card h3 { margin-bottom: 8px; }
+.card p, .card li { color: var(--muted); font-size: 0.95rem; }
+.card ul { margin: 0; padding-left: 18px; }
+.card .pick { font: 500 0.66rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 10px; }
+.card.is-pick { border-color: var(--accent); }
+
+.phases { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.phases li { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 18px; padding-block: 18px; border-top: 1px solid var(--line); }
+.phases li:last-child { border-bottom: 1px solid var(--line); }
+.phases .when { font: 500 0.78rem/1.4 var(--mono); color: var(--accent); }
+.phases ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.95rem; }
+
+.motion { font-size: 0.93rem; }
+@media (max-width: 560px) {
+  .finding { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .phases li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+</style>
+
+<main>
+  <header>
+    <span class="kicker">Website review &middot; cordell-partners.com</span>
+    <h1>Cordell Partners site audit and rebuild plan</h1>
+    <p class="lede">The firm&rsquo;s positioning is strong: a partner-led GCC financial-services specialist with Bloomberg airtime and live DIFC and ADGM mandates. The website undersells it. It runs on a stock consulting theme, carries public copy errors, and gives search engines very little to work with.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://claude.ai/artifact/EvfMy3dxC4jZPFoT6UAiHA">Open the redesign template &rarr;</a>
+    </div>
+    <p class="meta">Reviewed 27 September 2026 &middot; Pages: Home, About, Services, Live Mandates, Contact</p>
+  </header>
+
+  <section aria-labelledby="summary">
+    <h2 id="summary">Scorecard</h2>
+    <div class="score">
+      <div><span>Brand &amp; design</span><b class="grade-d">D</b><small>Generic ThemeForest look with a purple gradient that says &ldquo;SaaS&rdquo;, not &ldquo;executive search&rdquo;.</small></div>
+      <div><span>Content &amp; copy</span><b class="grade-d">D</b><small>Typos, inconsistent figures and a pasted &ldquo;Ask ChatGPT&rdquo; in the homepage title.</small></div>
+      <div><span>SEO</span><b class="grade-d">D</b><small>No H1 on any page, no meta descriptions, no social previews, no structured data.</small></div>
+      <div><span>Performance</span><b class="grade-c">C</b><small>114 requests and 57 scripts for five pages of text.</small></div>
+      <div><span>Conversion</span><b class="grade-c">C</b><small>&ldquo;Contact us&rdquo; everywhere, but no brief form for clients and no CV route for candidates.</small></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="stack">
+    <h2 id="stack">How it is built</h2>
+    <p>Everything below comes from the live HTML and response headers.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>What is running</th><th>Comment</th></tr></thead>
+        <tbody>
+          <tr><td>CMS</td><td>WordPress 6.8.2</td><td>Fine as a platform. Its version number is public in a generator tag.</td></tr>
+          <tr><td>Theme</td><td>&ldquo;Conult&rdquo; (ThemeForest consulting theme) with <code>conult-themer</code></td><td>The source of the generic look. The same layout is used by hundreds of consultancies.</td></tr>
+          <tr><td>Page builder</td><td>Elementor 3.31 and Royal Elementor Addons</td><td>Heavy markup. There are 814 &ldquo;elementor&rdquo; references on the homepage.</td></tr>
+          <tr><td>Hero</td><td>Slider Revolution 6.7</td><td>A heavy slider plugin that renders the hero late.</td></tr>
+          <tr><td>Unused plugins</td><td>WooCommerce 10.1, The Events Calendar, Redux</td><td>No shop and no events on the site, yet 7 WooCommerce scripts load on every page.</td></tr>
+          <tr><td>Forms</td><td>Contact Form 7</td><td>Not connected to Atlas, so every enquiry is rekeyed by hand.</td></tr>
+          <tr><td>Mandates</td><td>Typed into Elementor by hand</td><td>Shows 4 roles. Atlas has 25 published and 46 active. See the Atlas section.</td></tr>
+          <tr><td>Fonts</td><td>Gilmer, DM Sans, Roboto, Inter, Cardo</td><td>Five families. Two would do.</td></tr>
+          <tr><td>Hosting</td><td>LiteSpeed server with LiteSpeed Cache</td><td>Caching works (cache hit). A firewall blocks some visitors from loading images (see note).</td></tr>
+          <tr><td>Analytics</td><td>None detected</td><td>No Google Analytics, Tag Manager or LinkedIn Insight tag, so there is no data on who visits.</td></tr>
+          <tr><td>Built by</td><td>&ldquo;made by content kitchen&rdquo; (footer credit)</td><td>Agency credit links out from every page.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:14px">
+      <p><b>Check the firewall.</b> From our cloud test browser the HTML loaded, but every image, script and stylesheet returned 403 Forbidden, so the page rendered with broken images and a blank hero. Most visitors on home or office connections will not see this. It will affect some VPN users, some corporate networks, and link-preview bots such as LinkedIn&rsquo;s. Ask the host to review the LiteSpeed or Imunify rule that blocks <code>/wp-content/</code>.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="findings">
+    <h2 id="findings">Findings</h2>
+    <p class="group-label">Fix this week</p>
+    <div class="findings">
+      <div class="finding"><span class="sev sev-crit">Critical</span><div><h3>Client names are readable in the public Atlas job feed</h3><p>The Atlas job board page hides the client, but its public API returns the client company name for all 25 published roles. Anyone who knows where to look can see which firms are hiring for which positions.</p><p class="fix">Raise it with Atlas this week. See <a href="#atlas">Atlas integration</a>.</p></div></div>
+      <div class="finding"><span class="sev sev-crit">Critical</span><div><h3>&ldquo;Ask ChatGPT&rdquo; is in the homepage title</h3><p>The page title reads &ldquo;Cordell Partners is a trusted executive search firm with 14 years of UAE experience &hellip; Ask ChatGPT&rdquo;. It shows in Google results and browser tabs.</p><p class="fix">Change the title to &ldquo;Cordell Partners | Executive Search for GCC Financial Services&rdquo;.</p></div></div>
+      <div class="finding"><span class="sev sev-crit">Critical</span><div><h3>&ldquo;SHREK firms&rdquo; on the Services page</h3><p>The fee paragraph says commitment fees &ldquo;will be nowhere near the SHREK firms&rdquo;. It reads as a typo or an in-joke to a prospective client.</p><p class="fix">Replace with the fee-model copy in the template.</p></div></div>
+      <div class="finding"><span class="sev sev-crit">Critical</span><div><h3>Figures that contradict each other</h3><p>The homepage shows 966 &ldquo;satisfied clients&rdquo; beside 315 executed mandates, and &ldquo;2 focused locations&rdquo; while the footer lists Dubai, Abu Dhabi and London. Senior buyers notice numbers that do not add up.</p><p class="fix">Keep only figures you can source. Suggested set: years in the UAE, mandates executed, retained completion rate, offices.</p></div></div>
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>Spelling errors in public copy</h3><p>&ldquo;soltutions&rdquo;, &ldquo;cordell partnes&rdquo;, &ldquo;georgraphies&rdquo;, &ldquo;juristictions&rdquo;, &ldquo;Group bead of Compliance&rdquo;, &ldquo;stake holder&rdquo;, and mandate numbering in mixed case (&ldquo;one&rdquo;, &ldquo;TWO&rdquo;).</p><p class="fix">Correct them, and have a second person proofread before anything is published.</p></div></div>
+    </div>
+
+    <p class="group-label">Search and sharing</p>
+    <div class="findings">
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>No H1 on any page</h3><p>All five pages rely on H2 and H3 tags. Search engines and screen readers get no main heading.</p><p class="fix">One H1 per page that states the topic, e.g. &ldquo;Live executive mandates in DIFC and ADGM&rdquo;.</p></div></div>
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>No meta descriptions or social previews</h3><p>No meta description and no Open Graph tags on any page. Links shared on LinkedIn, the firm&rsquo;s main channel, show no controlled image or summary.</p><p class="fix">Write a description for each page and add a branded 1200&times;630 share image.</p></div></div>
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>No structured data</h3><p>There is no Organization, LocalBusiness or JobPosting markup, so mandates are not eligible for Google&rsquo;s job listings.</p><p class="fix">Add JobPosting markup to every live mandate and Organization markup site-wide.</p></div></div>
+      <div class="finding"><span class="sev sev-med">Medium</span><div><h3>Unreadable image names and missing alt text</h3><p>Files such as <code>WhatsApp-Image-2025-08-15-at-1.45.51-PM.jpeg</code> and <code>Screenshot-2025-08-14-010735.png</code>. There are 44 images with empty alt text across the five pages.</p><p class="fix">Use descriptive file names and real alt text on meaningful images.</p></div></div>
+    </div>
+
+    <p class="group-label">Performance</p>
+    <div class="findings">
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>Too much code for a text site</h3><p>The homepage makes 114 requests: 57 scripts and 43 stylesheets, about 1.9&nbsp;MB on desktop. The network took 7.3 seconds to go idle in our test.</p><p class="fix">Remove WooCommerce, The Events Calendar and Slider Revolution. On a rebuild, target under 30 requests and 500&nbsp;KB.</p></div></div>
+    </div>
+
+    <p class="group-label">Brand, trust and conversion</p>
+    <div class="findings">
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>The look does not match the market</h3><p>Violet gradients (<code>#827dfd</code>), rounded icon cards and a stock world map are SaaS conventions. Executive search buyers, such as sovereign funds, boards and family offices, expect editorial restraint, like a private bank or a law firm.</p><p class="fix">Deep ink and stone palette, a high-contrast serif, a single brass accent, generous space. See the template.</p></div></div>
+      <div class="finding"><span class="sev sev-med">Medium</span><div><h3>People are the product, but they are missing</h3><p>Oscar is named in every testimonial, yet there is no team page, no partner profiles and no photos. Testimonials use first names only.</p><p class="fix">Add partner profiles with editorial portraits and LinkedIn links. Ask referees to allow full names and firms.</p></div></div>
+      <div class="finding"><span class="sev sev-med">Medium</span><div><h3>One generic call to action for two audiences</h3><p>Clients and candidates both get &ldquo;Contact us&rdquo;. Mandates only offer &ldquo;Apply here&rdquo;, with no confidential CV route.</p><p class="fix">Two paths: &ldquo;Brief us on a search&rdquo; for clients, &ldquo;Send your CV in confidence&rdquo; for candidates. Route both into Atlas.</p></div></div>
+      <div class="finding"><span class="sev sev-low">Low</span><div><h3>Insights do not show their sources</h3><p>Press items do not name the publication, apart from Bloomberg in the body copy.</p><p class="fix">Show the outlet on each item and link to the original article.</p></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="atlas-h" id="atlas">
+    <h2 id="atlas-h">Atlas integration</h2>
+    <p>Cordell already runs a public Atlas job board at <a href="https://my.recruitwithatlas.com/Cordell-Partners/jobs">my.recruitwithatlas.com/Cordell-Partners/jobs</a>. The website does not link to it and repeats four old mandates instead.</p>
+    <div class="score">
+      <div><span>Active projects in Atlas</span><b>46</b><small>Every open search, including talent pools and internal projects.</small></div>
+      <div><span>Published on the Atlas board</span><b>25</b><small>Each role has a full brief and an application form.</small></div>
+      <div><span>Shown on the website</span><b class="grade-d">4</b><small>Typed in by hand and out of date.</small></div>
+    </div>
+
+    <h3 style="margin: 28px 0 10px">How the Atlas board works</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Part</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td>Job list</td><td>A public GraphQL API at <code>api.recruitwithatlas.com/public-graphql</code>, queried with the agency alias <code>Cordell-Partners</code>. It needs no key, and it accepts requests from any website.</td></tr>
+          <tr><td>Job page</td><td><code>my.recruitwithatlas.com/public/&lt;project id&gt;</code> shows the full job description from Atlas.</td></tr>
+          <tr><td>Apply form</td><td>Full name, email, LinkedIn profile, CV (required) and extra files. The application lands in the project&rsquo;s pipeline in Atlas.</td></tr>
+          <tr><td>Publishing</td><td>A role appears once applications are enabled on its Atlas project. Nothing has to change on the website.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout" style="margin-top:14px">
+      <p><b>Confidentiality risk.</b> The job board page never shows the client, but the API behind it returns the client company name for all 25 published roles. For a firm that runs confidential searches, that is a leak. Ask Atlas to remove the company from the public API, or add a per-project &ldquo;confidential client&rdquo; setting. Until then, assume every published role reveals its client. The template&rsquo;s query never asks for client names.</p>
+    </div>
+
+    <h3 style="margin: 28px 0 10px">What we can connect</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Integration</th><th>How it works</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr><td>Live mandates list</td><td>The site reads the public feed in the browser, so roles published in Atlas appear on the website on the next page load. <b>Already in the template.</b></td><td>Done</td></tr>
+          <tr><td>Apply</td><td>Each role links to its Atlas page and apply form, so CVs land in the right pipeline. <b>Already in the template.</b></td><td>Done</td></tr>
+          <tr><td>General CV route</td><td>Create a &ldquo;General applications&rdquo; talent-pool project in Atlas with applications enabled, then point &ldquo;Send your CV in confidence&rdquo; at its apply page.</td><td>10 minutes in Atlas</td></tr>
+          <tr><td>Google for Jobs</td><td>Generate JobPosting markup from the feed when the page is built, so each role can appear in Google&rsquo;s job search.</td><td>Small, build step or serverless function</td></tr>
+          <tr><td>Client brief form</td><td>A small server-side function holds the Atlas Open API key. It creates the company, contact and opportunity, plus a task for the partner on duty. The key never reaches the browser.</td><td>Medium, needs Atlas API docs and a key</td></tr>
+          <tr><td>Track-record figures</td><td>Pull mandates executed and placements from Atlas each month, so the numbers on the site have a source.</td><td>Medium, or a manual monthly update</td></tr>
+          <tr><td>Branded job board</td><td>Ask Atlas whether the board supports a custom domain (e.g. careers.cordell-partners.com) and brand styling. If not, the website list becomes the front door and the board only handles applications.</td><td>Question for Atlas</td></tr>
+          <tr><td>Social posting</td><td>The same feed drives the LinkedIn and Telegram role posts the team already makes from Atlas.</td><td>Already in use</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin: 28px 0 10px">Clean up the Atlas data first</h3>
+    <p>Once the website reads Atlas directly, every field shows publicly exactly as it is typed.</p>
+    <div class="findings">
+      <div class="finding"><span class="sev sev-high">High</span><div><h3>Salary written five different ways</h3><p>Examples: &ldquo;35,000&rdquo;, &ldquo;35000&rdquo;, &ldquo;AED 60,000&rdquo;, &ldquo;AED 15,000-22,000 per month&rdquo; and &ldquo;$125,000 first-year base + discretionary bonus&rdquo;. 14 of the 25 have no salary at all. The template only shows a salary that names its currency.</p><p class="fix">Agree one format, e.g. &ldquo;AED 45,000 per month + bonus&rdquo;.</p></div></div>
+      <div class="finding"><span class="sev sev-med">Medium</span><div><h3>Missing locations and typos in titles</h3><p>9 of 25 roles have no location set. The template infers 3 from their titles and marks the other 6 &ldquo;TBC&rdquo;. One public title reads &ldquo;Institutional Sales and Distriution&rdquo;.</p><p class="fix">Set the location field on every published project and proofread the titles.</p></div></div>
+      <div class="finding"><span class="sev sev-low">Low</span><div><h3>21 active projects are not published</h3><p>Some are talent pools or internal projects and should stay private. Check the rest: each unpublished open search is a role candidates cannot find.</p><p class="fix">Review the list once a week in the pipeline meeting.</p></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="direction">
+    <h2 id="direction">The redesign direction</h2>
+    <p>The template turns the audit into a working homepage. Use &ldquo;Show design notes&rdquo; (bottom right of the template) to see the reasoning for each section.</p>
+    <div class="cols">
+      <div class="card"><h3>Positioning</h3><p>&ldquo;Leadership for the Gulf&rsquo;s capital.&rdquo; One line naming the sector, the region and the level. It replaces &ldquo;Executive Search | Headhunter&rdquo;.</p></div>
+      <div class="card"><h3>Visual identity</h3><p>Ink <code>#0D1417</code>, stone <code>#ECECE7</code>, brass <code>#C49A5A</code>, sea-glass <code>#6F9C98</code>. Bodoni Moda for display, Hanken Grotesk for text, IBM Plex Mono for labels and data.</p></div>
+      <div class="card"><h3>Signature motion</h3><p>The hero shows a search narrowing from 1,240 mapped profiles to one appointment. It is the firm&rsquo;s method as a single animation, and it loops quietly.</p></div>
+    </div>
+    <h3 style="margin: 28px 0 10px">Motion system</h3>
+    <div class="table-wrap motion">
+      <table>
+        <thead><tr><th>Moment</th><th>Behaviour</th><th>Timing</th></tr></thead>
+        <tbody>
+          <tr><td>Page load</td><td>Headline lines rise out of a mask, then the text and visual fade up</td><td>1.1s, staggered 120ms, ease-out-expo</td></tr>
+          <tr><td>Hero visual</td><td>Canvas funnel: map, approach, assess, shortlist, appoint. Pauses off-screen</td><td>14s loop</td></tr>
+          <tr><td>Scroll</td><td>Sections drift in. The process bar fills as the steps pass (CSS scroll-driven, no library)</td><td>Tied to scroll</td></tr>
+          <tr><td>Hover</td><td>Practice rows wipe to ink, arrows rotate, buttons fill from below, nav underlines draw in</td><td>350&ndash;600ms</td></tr>
+          <tr><td>Proof</td><td>Testimonials rotate with a progress bar and pause on hover. Figures count up once</td><td>7s per quote, 1.4s count</td></tr>
+          <tr><td>Accessibility</td><td>All motion turns off for visitors who set &ldquo;reduce motion&rdquo;</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="margin: 28px 0 10px">Proposed sitemap</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Page</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Home</td><td>Positioning, practice, approach, proof, mandates preview, brief form</td></tr>
+          <tr><td>Practice (&times;4)</td><td>One page per service, each with its own H1, FAQ and brief form</td></tr>
+          <tr><td>Sectors</td><td>Asset management, sovereign and family office, banking, fintech, regulatory and compliance</td></tr>
+          <tr><td>Live mandates</td><td>Filterable list fed from Atlas, JobPosting markup, confidential CV upload</td></tr>
+          <tr><td>Insights</td><td>Media appearances, podcast and a quarterly Compensation Pulse report</td></tr>
+          <tr><td>The firm</td><td>Partner profiles, NISAI and community work, offices</td></tr>
+          <tr><td>Contact</td><td>Separate routes for clients and candidates, office details</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="build">
+    <h2 id="build">How to build it</h2>
+    <div class="cols">
+      <div class="card is-pick"><span class="pick">Recommended</span><h3>Webflow</h3><ul><li>Hosting, SSL and CDN included</li><li>CMS collections for mandates and insights that consultants can edit</li><li>Native GSAP interactions for the motion system</li><li>No plugins to patch</li></ul></div>
+      <div class="card"><h3>Stay on WordPress</h3><ul><li>Custom block theme built from the template</li><li>Remove Elementor, Slider Revolution, WooCommerce and Events</li><li>Mandates as a custom post type</li><li>Best if an agency already maintains it</li></ul></div>
+      <div class="card"><h3>Astro + headless CMS</h3><ul><li>Fastest result and full design control</li><li>Mandates pulled from the Atlas API at build time</li><li>Needs a developer for every change</li></ul></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="plan">
+    <h2 id="plan">Plan</h2>
+    <ol class="phases">
+      <li><span class="when">Week 1</span><div><h3>Fix the live site</h3><ul><li>Title, typos, &ldquo;SHREK&rdquo; copy, conflicting figures</li><li>Meta descriptions, share image, one H1 per page</li><li>Deactivate WooCommerce, Events Calendar and Redux</li><li>Add analytics and the LinkedIn Insight tag; review the firewall rule</li><li>Raise the client-name exposure with Atlas; tidy salaries, locations and titles in Atlas</li></ul></div></li>
+      <li><span class="when">Weeks 2&ndash;3</span><div><h3>Content</h3><ul><li>Verify every figure and its source</li><li>Partner portraits and bios</li><li>Named testimonials with sign-off</li><li>Service and sector page copy</li></ul></div></li>
+      <li><span class="when">Weeks 3&ndash;6</span><div><h3>Build</h3><ul><li>Build the template on the chosen platform</li><li>Keep the live Atlas mandates feed; connect the brief form through the Atlas Open API</li><li>JobPosting and Organization markup</li><li>Keep old URLs with 301 redirects</li></ul></div></li>
+      <li><span class="when">Launch</span><div><h3>Quality gate</h3><ul><li>Lighthouse 90+ on mobile for performance, accessibility and SEO</li><li>Tested on iPhone, Android, and a corporate VPN</li><li>A final proofread by someone who did not write the copy</li></ul></div></li>
+    </ol>
+  </section>
+</main>
+
+</body>
+</html>
