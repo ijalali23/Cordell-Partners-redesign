@@ -63,16 +63,20 @@ Oscar Orellana-Hyder (Co-founder), Cellou Diallo (Senior Consultant), Ikhlas Jal
 
 ## Branches & deployment
 
-- **`main`** - production. Every push deploys the live site via GitHub Pages
-  (`.github/workflows/deploy.yml`). This is the final, live branch.
+- **`main`** - production. The release branch deployed to the live site.
 - **`develop`** - development, testing and enhancements. Day-to-day work happens
   here; pushes run sanity checks (`.github/workflows/validate.yml`).
 
-Workflow: branch off `develop`, open a pull request into `main`, and merging to
-`main` publishes automatically.
+Workflow: branch off `develop`, open a pull request into `main`, and merge to
+`main` to release.
 
-**Live URL:** https://ijalali23.github.io/cordell-partners-redesign/
-(available once the first deploy on `main` finishes under the repo's Actions tab).
+**Production:** the site is hosted on the cordell-partners.com PHP hosting
+(the static pages plus the `api/` application endpoint), served at
+https://cordell-partners.com. See `docs/atlas-form.md` for the deploy steps.
+
+**Optional preview:** a static copy can be published to GitHub Pages
+(`.github/workflows/deploy.yml`, enable under Settings - Pages - Source: GitHub
+Actions). The application form does not run on Pages because it needs PHP.
 
 ## History
 
