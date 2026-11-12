@@ -532,18 +532,18 @@ form { display: grid; gap: 18px; align-content: start; }
       </div>
 
       <figure class="viz" aria-label="Illustration of a search narrowing from a mapped market to one appointment" style="margin:0">
-        <div class="viz-top"><span>Anatomy of a search</span><span>Illustrative &middot; <b>CFO, DIFC asset manager</b></span></div>
+        <div class="viz-top"><span>Anatomy of a search</span><span>Recent search &middot; <b>Chief Financial Officer</b></span></div>
         <canvas id="funnel" aria-hidden="true"></canvas>
         <div class="viz-stages" id="stages">
-          <div class="stage" style="left:10%"><b>1,240</b>Mapped</div>
-          <div class="stage" style="left:30%"><b>186</b>Approached</div>
-          <div class="stage" style="left:50%"><b>42</b>Assessed</div>
-          <div class="stage" style="left:70%"><b>5</b>Shortlist</div>
+          <div class="stage" style="left:10%"><b>20</b>Longlisted</div>
+          <div class="stage" style="left:30%"><b>12</b>Evaluated</div>
+          <div class="stage" style="left:50%"><b>9</b>Shortlisted</div>
+          <div class="stage" style="left:70%"><b>7</b>Interviewed</div>
           <div class="stage" style="left:90%"><b>1</b>Appointed</div>
         </div>
       </figure>
     </div>
-    <div class="wrap"><p class="viz-caption">Figures are illustrative of a typical C-suite search. Replace with anonymised data from a real mandate before launch.</p></div>
+    <div class="wrap"><p class="viz-caption">A recent Cordell CFO search, client anonymised: longlist through to appointment.</p></div>
   </section>
 
   <section class="marquee-band" aria-label="Media and partners">
@@ -1000,7 +1000,7 @@ form { display: grid; gap: 18px; align-content: start; }
   var W = 0, H = 0, particles = [];
   var small = window.matchMedia('(max-width: 640px)').matches;
   var N = small ? 150 : 260;
-  var KEEP = [N, small ? 40 : 60, small ? 14 : 18, 5, 1];
+  var KEEP = [N, Math.round(N * 0.6), Math.round(N * 0.45), Math.round(N * 0.35), small ? 3 : 4];
   var SPREAD = [[0.085, 0.36], [0.06, 0.24], [0.04, 0.13], [0, 0], [0, 0]];
 
   function rand(seed) { var x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); }
