@@ -532,18 +532,18 @@ form { display: grid; gap: 18px; align-content: start; }
       </div>
 
       <figure class="viz" aria-label="Illustration of a search narrowing from a mapped market to one appointment" style="margin:0">
-        <div class="viz-top"><span>Anatomy of a search</span><span>Recent search &middot; <b>Chief Financial Officer</b></span></div>
+        <div class="viz-top"><span>Anatomy of a search</span><span>C-suite mandate</span></div>
         <canvas id="funnel" aria-hidden="true"></canvas>
         <div class="viz-stages" id="stages">
-          <div class="stage" style="left:10%"><b>20</b>Longlisted</div>
-          <div class="stage" style="left:30%"><b>12</b>Evaluated</div>
-          <div class="stage" style="left:50%"><b>9</b>Shortlisted</div>
-          <div class="stage" style="left:70%"><b>7</b>Interviewed</div>
+          <div class="stage" style="left:10%"><b>1,240</b>Mapped</div>
+          <div class="stage" style="left:30%"><b>186</b>Approached</div>
+          <div class="stage" style="left:50%"><b>42</b>Assessed</div>
+          <div class="stage" style="left:70%"><b>5</b>Shortlist</div>
           <div class="stage" style="left:90%"><b>1</b>Appointed</div>
         </div>
       </figure>
     </div>
-    <div class="wrap"><p class="viz-caption">A recent Cordell CFO search, client anonymised: longlist through to appointment.</p></div>
+    <div class="wrap"><p class="viz-caption">How a Cordell search narrows: from market map to appointment.</p></div>
   </section>
 
   <section class="marquee-band" aria-label="Media and partners">
@@ -996,12 +996,14 @@ form { display: grid; gap: 18px; align-content: start; }
   var canvas = document.getElementById('funnel');
   var ctx = canvas.getContext('2d');
   var stageEls = document.querySelectorAll('#stages .stage');
-  var COLS = [0.1, 0.3, 0.5, 0.7, 0.9];
+  var NS = stageEls.length, LAST = NS - 1;
+  var COLS = []; for (var ci = 0; ci < NS; ci++) COLS.push(0.08 + ci * (0.85 / LAST));
   var W = 0, H = 0, particles = [];
   var small = window.matchMedia('(max-width: 640px)').matches;
   var N = small ? 150 : 260;
-  var KEEP = [N, Math.round(N * 0.6), Math.round(N * 0.45), Math.round(N * 0.35), small ? 3 : 4];
-  var SPREAD = [[0.085, 0.36], [0.06, 0.24], [0.04, 0.13], [0, 0], [0, 0]];
+  var FRAC = [1, 0.2308, 0.0692, 0.0192, 0.0038, 0.008, 0.004];
+  var KEEP = []; for (var ki = 0; ki < NS; ki++) KEEP.push(ki === 0 ? N : Math.max(1, Math.round(N * (FRAC[ki] || 0.01))));
+  var SPREAD = []; for (var pi = 0; pi < NS; pi++) { var tn = pi / LAST; SPREAD.push([0.085 * (1 - tn), 0.36 * (1 - tn)]); }
 
   function rand(seed) { var x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); }
   function gauss(seed) { return (rand(seed) + rand(seed + 1.7) + rand(seed + 3.3) - 1.5) / 1.5; }
@@ -1012,11 +1014,11 @@ form { display: grid; gap: 18px; align-content: start; }
       var last = 0;
       for (var k = 0; k < KEEP.length; k++) if (i < KEEP[k]) last = k;
       var targets = [];
-      for (var s = 0; s < 5; s++) {
+      for (var sg = 0; sg < NS; sg++) {
         var x, y;
-        if (s === 3) { x = COLS[3]; y = 0.5 + (Math.min(i, 4) - 2) * 0.11; }
-        else if (s === 4) { x = COLS[4]; y = 0.5; }
-        else { x = COLS[s] + gauss(i * 7 + s) * SPREAD[s][0]; y = 0.5 + gauss(i * 13 + s * 5) * SPREAD[s][1]; }
+        if (sg === LAST) { x = COLS[LAST]; y = 0.5; }
+        else if (sg === LAST - 1) { x = COLS[LAST - 1]; y = 0.5 + (Math.min(i, 6) - 3) * 0.072; }
+        else { x = COLS[sg] + gauss(i * 7 + sg) * SPREAD[sg][0]; y = 0.5 + gauss(i * 13 + sg * 5) * SPREAD[sg][1]; }
         targets.push([x, y]);
       }
       particles.push({ last: last, t: targets, size: 1.1 + rand(i * 3.1) * 1.1, phase: rand(i * 5.7) * Math.PI * 2 });
@@ -1031,15 +1033,13 @@ form { display: grid; gap: 18px; align-content: start; }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  /* Timeline (seconds): hold, four narrowing transitions, hold on the appointment, reset */
-  var CYCLE = 14, T0 = 1.4, STEP = 2.0, MOVE = 1.35, RESET_AT = 11.6, RESET_DUR = 1.8;
+  var T0 = 1.4, STEP = 1.7, MOVE = 1.2, RESET_DUR = 1.8;
+  var RESET_AT = T0 + LAST * STEP + 1.2;
+  var CYCLE = RESET_AT + RESET_DUR + 1.4;
   function ease(p) { return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
   function stageAt(t) {
-    if (t >= RESET_AT) return { from: 4, to: 0, p: ease(Math.min(1, (t - RESET_AT) / RESET_DUR)) };
-    for (var k = 4; k >= 1; k--) {
-      var s = T0 + (k - 1) * STEP;
-      if (t >= s) return { from: k - 1, to: k, p: ease(Math.min(1, (t - s) / MOVE)) };
-    }
+    if (t >= RESET_AT) return { from: LAST, to: 0, p: ease(Math.min(1, (t - RESET_AT) / RESET_DUR)) };
+    for (var k = LAST; k >= 1; k--) { var ss = T0 + (k - 1) * STEP; if (t >= ss) return { from: k - 1, to: k, p: ease(Math.min(1, (t - ss) / MOVE)) }; }
     return { from: 0, to: 0, p: 1 };
   }
 
@@ -1047,15 +1047,14 @@ form { display: grid; gap: 18px; align-content: start; }
     ctx.clearRect(0, 0, W, H);
     var st = stageAt(t);
     var active = st.p > 0.5 ? st.to : st.from;
-    stageEls.forEach(function (el, k) { el.classList.toggle('is-on', k <= active && !(st.to === 0 && st.from === 4 && k > 0)); });
+    stageEls.forEach(function (el, k) { el.classList.toggle('is-on', k <= active && !(st.to === 0 && st.from === LAST && k > 0)); });
 
-    /* funnel guides */
     ctx.strokeStyle = 'rgba(236,236,231,0.07)';
     ctx.lineWidth = 1;
     COLS.forEach(function (c) { ctx.beginPath(); ctx.moveTo(c * W, 14); ctx.lineTo(c * W, H - 14); ctx.stroke(); });
     ctx.strokeStyle = 'rgba(196,154,90,0.18)';
-    ctx.beginPath(); ctx.moveTo(COLS[0] * W, H * 0.1); ctx.bezierCurveTo(W * 0.5, H * 0.18, W * 0.72, H * 0.42, COLS[4] * W, H * 0.5); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(COLS[0] * W, H * 0.9); ctx.bezierCurveTo(W * 0.5, H * 0.82, W * 0.72, H * 0.58, COLS[4] * W, H * 0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(COLS[0] * W, H * 0.1); ctx.bezierCurveTo(W * 0.5, H * 0.18, W * 0.72, H * 0.42, COLS[LAST] * W, H * 0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(COLS[0] * W, H * 0.9); ctx.bezierCurveTo(W * 0.5, H * 0.82, W * 0.72, H * 0.58, COLS[LAST] * W, H * 0.5); ctx.stroke();
 
     for (var i = N - 1; i >= 0; i--) {
       var pt = particles[i];
@@ -1063,16 +1062,16 @@ form { display: grid; gap: 18px; align-content: start; }
       var x = (a[0] + (b[0] - a[0]) * st.p) * W;
       var y = (a[1] + (b[1] - a[1]) * st.p) * H;
       y += Math.sin(t * 0.9 + pt.phase) * 1.4;
-      var eliminated = pt.last < active && !(st.to === 0 && st.from === 4);
+      var eliminated = pt.last < active && !(st.to === 0 && st.from === LAST);
       var r = pt.size, color;
-      if (pt.last === 4 && active === 4) {
+      if (pt.last === LAST && active === LAST) {
         r = 5.5;
         var pulse = (t * 0.8) % 1;
         ctx.beginPath(); ctx.arc(x, y, 6 + pulse * 22, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(196,154,90,' + (0.55 * (1 - pulse)).toFixed(3) + ')'; ctx.stroke();
         color = '#d9b98a';
-      } else if (pt.last >= 3 && active >= 3) {
-        r = 3.2; color = pt.last === 4 ? '#d9b98a' : 'rgba(217,185,138,0.85)';
+      } else if (pt.last >= LAST - 1 && active >= LAST - 1) {
+        r = 3.2; color = pt.last === LAST ? '#d9b98a' : 'rgba(217,185,138,0.85)';
       } else if (eliminated) {
         color = 'rgba(142,156,160,0.22)';
       } else {
