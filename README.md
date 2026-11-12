@@ -29,6 +29,10 @@ A role published in Atlas appears on the site on the next page load, with no web
 If the feed cannot be reached, a snapshot embedded in the page is shown instead.
 Each role links to its Atlas application page.
 
+The embedded fallback snapshot is refreshed daily from the live feed by
+`.github/workflows/refresh-mandates.yml` (via `scripts/refresh-mandates.py`), so
+even the no-JS fallback stays current. Run it on demand from the Actions tab.
+
 ## Brand
 
 - Palette: ink `#0D1417`, ivory `#F6F4EF`, brass `#9A7740`, royal blue `#1E05A9`

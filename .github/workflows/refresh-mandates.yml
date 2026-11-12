@@ -1,0 +1,36 @@
+name: Refresh live mandates
+
+# Keeps the embedded fallback snapshot in index.html in step with the Atlas
+# public feed. The site already fetches the feed live in the browser; this keeps
+# the no-JS / pre-fetch / fetch-failure fallback current too. Runs on the
+# default branch; a change triggers the Pages deploy.
+on:
+  schedule:
+    - cron: '0 6 * * *'   # daily, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-mandates
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh snapshot from Atlas feed
+        run: python3 scripts/refresh-mandates.py
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain index.html)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Auto-refresh live mandates snapshot from Atlas"
+            git push
+          else
+            echo "Snapshot already current."
+          fi
