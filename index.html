@@ -292,6 +292,53 @@ h2 em, h1 em { font-style: normal; color: var(--brass); font-weight: 600; }
 .mandates-more { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .mandates-empty { padding-block: 28px; color: var(--slate); margin: 0; }
 .mandates-foot { margin-top: 28px; font-size: 0.95rem; color: var(--slate); }
+button.m-row { width: 100%; background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.m-row .m-toggle { margin-left: auto; }
+
+/* Application modal */
+.apply-modal { position: fixed; inset: 0; z-index: 200; overflow-y: auto; display: grid; padding: 20px; }
+.apply-modal[hidden] { display: none !important; }
+.apply-backdrop { position: fixed; inset: 0; background: rgba(13, 20, 23, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; transition: opacity .3s ease; }
+.apply-modal.is-open .apply-backdrop { opacity: 1; }
+.apply-card {
+  position: relative; margin: auto; width: min(560px, 100%);
+  background: var(--bone); color: var(--ink); border-radius: 10px; padding: 34px clamp(22px, 4vw, 40px) 32px;
+  box-shadow: 0 30px 80px rgba(13, 20, 23, 0.4); transform: translateY(16px) scale(.985); opacity: 0;
+  transition: transform .4s var(--ease-out), opacity .35s ease;
+}
+.apply-modal.is-open .apply-card { transform: none; opacity: 1; }
+.apply-close { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line-light); background: none; color: var(--ink); font-size: 1.1rem; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: background .25s ease, color .25s ease; }
+.apply-close:hover { background: var(--ink); color: var(--bone); }
+.apply-eyebrow { font: 500 0.66rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--brass-soft); }
+.apply-card h3 { font: 500 clamp(1.4rem, 3vw, 1.85rem)/1.2 var(--display); margin: 12px 36px 6px 0; }
+.apply-sub { color: var(--slate); font-size: 0.95rem; margin: 0 0 22px; }
+.apply-form { display: grid; gap: 15px; }
+.afield { display: grid; gap: 6px; }
+.afield.row2 { grid-template-columns: 1fr 1fr; gap: 15px; }
+@media (max-width: 460px) { .afield.row2 { grid-template-columns: 1fr; } }
+.apply-form .afield label { font: 500 0.72rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+.apply-form .afield label .req { color: var(--royal); }
+.apply-form .afield input, .apply-form .afield select {
+  font: inherit; font-size: 0.98rem; color: var(--ink); background: #fff; border: 1px solid var(--line-light);
+  border-radius: 6px; padding: 11px 13px; width: 100%; transition: border-color .2s ease, box-shadow .2s ease;
+}
+.apply-form .afield input:focus, .apply-form .afield select:focus { outline: none; border-color: var(--brass); box-shadow: 0 0 0 3px rgba(198, 162, 78, .22); }
+.apply-form .afield input[type=file] { padding: 9px 11px; cursor: pointer; }
+.apply-form .afield input[type=file]::file-selector-button { font: 500 0.78rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; margin-right: 12px; padding: 8px 12px; border: 0; border-radius: 4px; background: var(--ink); color: var(--bone); cursor: pointer; }
+.afield.has-error input, .afield.has-error select { border-color: #b4452f; }
+.field-error { font-size: 0.82rem; color: #b4452f; min-height: 0; }
+.apply-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.apply-consent { font-size: 0.82rem; color: var(--slate); line-height: 1.5; margin: 2px 0 4px; }
+.apply-consent a { color: var(--royal); }
+.apply-submit { width: 100%; justify-content: center; margin-top: 2px; }
+.apply-submit[disabled] { opacity: .6; cursor: default; }
+.apply-form-msg { font-size: 0.9rem; color: #b4452f; margin: 4px 0 0; }
+.apply-brief { display: inline-block; margin-top: 16px; font: 500 0.72rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--slate); border-bottom: 1px solid var(--line-light); padding-bottom: 3px; }
+.apply-brief:hover { color: var(--ink); border-color: var(--ink); }
+.apply-success { text-align: center; padding: 10px 0 6px; }
+.apply-success .tick { width: 56px; height: 56px; border-radius: 50%; background: rgba(63, 143, 115, .14); color: #2f6f58; display: grid; place-items: center; margin: 0 auto 18px; font-size: 1.6rem; }
+.apply-success h3 { margin: 0 0 8px; }
+.apply-success p { color: var(--slate); margin: 0 auto; max-width: 42ch; }
 
 /* Testimonials */
 .quotes { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 32px; }
@@ -668,7 +715,7 @@ form { display: grid; gap: 18px; align-content: start; }
         <button class="btn btn--ghost" type="button" id="show-all" hidden>Show all mandates</button>
         <a class="btn" href="https://my.recruitwithatlas.com/Cordell-Partners/jobs" target="_blank" rel="noopener">Send your CV in confidence <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
-      <p class="mandates-foot">Each role opens its full brief and application form on our Atlas job board. Applications go straight into the search team&rsquo;s pipeline.</p>
+      <p class="mandates-foot">Select a role to apply in confidence. Your details and CV go straight to the search team&rsquo;s pipeline. Prefer not to see a fit? Send your CV and we will contact you when one opens.</p>
     </div>
   </section>
 
@@ -882,13 +929,12 @@ form { display: grid; gap: 18px; align-content: start; }
     });
     var limit = expanded || q || activeLoc !== 'all' ? matches.length : PREVIEW_COUNT;
     listEl.innerHTML = matches.slice(0, limit).map(function (j, i) {
-      var back = encodeURIComponent('https://my.recruitwithatlas.com/' + ATLAS_AGENCY + '/jobs');
-      return '<li class="mandate"><a class="m-row" href="' + ATLAS_JOB_URL + encodeURIComponent(j.id) + '?backUrl=' + back + '" target="_blank" rel="noopener">' +
+      return '<li class="mandate"><button class="m-row" type="button" data-id="' + esc(j.id) + '" data-role="' + esc(j.role) + '" aria-haspopup="dialog">' +
         '<span class="m-ref">M-' + String(i + 1).padStart(2, '0') + '</span>' +
         '<span class="m-title">' + esc(j.role) + '</span>' +
         '<span class="m-juris' + (j.city ? '' : ' is-tbc') + '">' + esc(j.city || 'TBC') + '</span>' +
         '<span class="m-fn">' + (j.salary ? esc(j.salary) : 'Package on application') + '</span>' +
-        '<span class="m-toggle" aria-hidden="true">&rarr;</span></a></li>';
+        '<span class="m-toggle" aria-hidden="true">&rarr;</span></button></li>';
     }).join('');
     emptyEl.hidden = matches.length > 0;
     showAllBtn.hidden = matches.length <= limit;
@@ -1097,6 +1143,224 @@ form { display: grid; gap: 18px; align-content: start; }
     new IntersectionObserver(function (entries) { entries[0].isIntersecting ? play() : pause(); }).observe(canvas);
   }
   document.addEventListener('visibilitychange', function () { document.hidden ? pause() : play(); });
+})();
+</script>
+
+<div class="apply-modal" id="apply-modal" role="dialog" aria-modal="true" aria-labelledby="apply-title" hidden>
+  <div class="apply-backdrop" data-close></div>
+  <div class="apply-card" role="document">
+    <button class="apply-close" type="button" data-close aria-label="Close">&times;</button>
+    <div id="apply-body">
+      <span class="apply-eyebrow">Apply in confidence</span>
+      <h3 id="apply-title">Apply</h3>
+      <p class="apply-sub">Your application and CV go directly to the Cordell Partners search team. Nothing is shared with the client until you have spoken with us.</p>
+      <form class="apply-form" id="apply-form" novalidate>
+        <input type="hidden" name="projectId" id="apply-projectId">
+        <input type="hidden" name="role" id="apply-role">
+        <div class="apply-hp" aria-hidden="true"><label>Company website<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="afield" data-for="name">
+          <label for="af-name">Full name <span class="req">*</span></label>
+          <input type="text" id="af-name" name="name" autocomplete="name" required>
+          <span class="field-error"></span>
+        </div>
+        <div class="afield row2">
+          <div class="afield" data-for="email">
+            <label for="af-email">Email <span class="req">*</span></label>
+            <input type="email" id="af-email" name="email" autocomplete="email" required>
+            <span class="field-error"></span>
+          </div>
+          <div class="afield" data-for="phone">
+            <label for="af-phone">Phone</label>
+            <input type="tel" id="af-phone" name="phone" autocomplete="tel" placeholder="+971 ...">
+            <span class="field-error"></span>
+          </div>
+        </div>
+        <div class="afield row2">
+          <div class="afield" data-for="currentSalary">
+            <label for="af-cursal">Current salary</label>
+            <input type="text" id="af-cursal" name="currentSalary" placeholder="e.g. AED 30,000 / month">
+          </div>
+          <div class="afield" data-for="expectedSalary">
+            <label for="af-expsal">Expected salary</label>
+            <input type="text" id="af-expsal" name="expectedSalary" placeholder="e.g. AED 40,000 / month">
+          </div>
+        </div>
+        <div class="afield row2">
+          <div class="afield" data-for="locationPreference">
+            <label for="af-loc">Location preference</label>
+            <select id="af-loc" name="locationPreference">
+              <option value="">No preference</option>
+              <option>Dubai</option>
+              <option>Abu Dhabi</option>
+              <option>UAE - flexible</option>
+              <option>Wider GCC</option>
+              <option>Remote / other</option>
+            </select>
+          </div>
+          <div class="afield" data-for="nationality">
+            <label for="af-nat">Nationality</label>
+            <input type="text" id="af-nat" name="nationality" autocomplete="country-name">
+          </div>
+        </div>
+        <div class="afield" data-for="cv">
+          <label for="af-cv">CV <span class="req">*</span> <span style="text-transform:none;letter-spacing:0;color:var(--slate)">(PDF, DOC or DOCX)</span></label>
+          <input type="file" id="af-cv" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+          <span class="field-error"></span>
+        </div>
+        <p class="apply-consent">By applying you consent to Cordell Partners holding your details to consider you for this and similar roles, in line with our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+        <p class="apply-form-msg" id="apply-form-msg" hidden></p>
+        <button class="btn apply-submit" type="submit" id="apply-submit">Submit application <span class="arrow" aria-hidden="true">&rarr;</span></button>
+      </form>
+      <a class="apply-brief" id="apply-brief" href="#" target="_blank" rel="noopener">Read the full brief &rarr;</a>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  /* Candidate application: posts to a server endpoint that pushes straight into
+     the Atlas project pipeline (CV upload + applicant create). The Atlas token
+     lives only on that server, never in this page.
+
+     Same-origin default works when the site is served from PHP hosting
+     (e.g. cordell-partners.com). While the site is on a static host such as
+     GitHub Pages, set APPLY_ENDPOINT to the absolute URL of apply.php on the
+     PHP host, e.g. 'https://cordell-partners.com/api/apply.php'. */
+  var APPLY_ENDPOINT = 'api/apply.php';
+  var ATLAS_JOB_URL = 'https://my.recruitwithatlas.com/public/';
+  var ATLAS_AGENCY = 'Cordell-Partners';
+
+  var modal = document.getElementById('apply-modal');
+  var card = modal.querySelector('.apply-card');
+  var form = document.getElementById('apply-form');
+  var body = document.getElementById('apply-body');
+  var submitBtn = document.getElementById('apply-submit');
+  var formMsg = document.getElementById('apply-form-msg');
+  var mandateList = document.getElementById('mandate-list');
+  var lastFocus = null, formHTML = body.innerHTML;
+
+  function openModal(id, role) {
+    lastFocus = document.activeElement;
+    document.getElementById('apply-projectId').value = id;
+    document.getElementById('apply-role').value = role;
+    document.getElementById('apply-title').textContent = role || 'Apply';
+    var back = encodeURIComponent('https://my.recruitwithatlas.com/' + ATLAS_AGENCY + '/jobs');
+    document.getElementById('apply-brief').href = ATLAS_JOB_URL + encodeURIComponent(id) + '?backUrl=' + back;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { modal.classList.add('is-open'); });
+    var first = document.getElementById('af-name');
+    if (first) setTimeout(function () { first.focus(); }, 60);
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    setTimeout(function () {
+      modal.hidden = true;
+      /* Restore a fresh form for the next role. */
+      body.innerHTML = formHTML;
+      bindForm();
+    }, 300);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  if (mandateList) {
+    mandateList.addEventListener('click', function (e) {
+      var row = e.target.closest('.m-row');
+      if (!row) return;
+      openModal(row.dataset.id, row.dataset.role);
+    });
+  }
+  modal.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  /* Keep focus inside the dialog. */
+  modal.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || modal.hidden) return;
+    var f = card.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  function fieldError(name, msg) {
+    var wrap = form.querySelector('.afield[data-for="' + name + '"]');
+    if (!wrap) return;
+    wrap.classList.add('has-error');
+    var el = wrap.querySelector('.field-error');
+    if (el) el.textContent = msg || '';
+  }
+  function clearErrors() {
+    form.querySelectorAll('.afield.has-error').forEach(function (w) {
+      w.classList.remove('has-error');
+      var e = w.querySelector('.field-error'); if (e) e.textContent = '';
+    });
+    formMsg.hidden = true; formMsg.textContent = '';
+  }
+  function validate() {
+    clearErrors();
+    var ok = true;
+    var name = form.name.value.trim();
+    var email = form.email.value.trim();
+    var cv = form.cv.files[0];
+    if (name.length < 2) { fieldError('name', 'Please enter your full name.'); ok = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fieldError('email', 'Please enter a valid email address.'); ok = false; }
+    if (!cv) { fieldError('cv', 'Please attach your CV.'); ok = false; }
+    else {
+      var ext = cv.name.split('.').pop().toLowerCase();
+      if (['pdf', 'doc', 'docx'].indexOf(ext) === -1) { fieldError('cv', 'Use a PDF, DOC or DOCX file.'); ok = false; }
+      else if (cv.size > 8 * 1024 * 1024) { fieldError('cv', 'Your CV must be 8 MB or smaller.'); ok = false; }
+    }
+    return ok;
+  }
+  function showSuccess(name) {
+    body.innerHTML =
+      '<div class="apply-success">' +
+      '<div class="tick" aria-hidden="true">&#10003;</div>' +
+      '<h3>Application received</h3>' +
+      '<p>Thank you' + (name ? ', ' + escapeHtml(name.split(' ')[0]) : '') + '. Your CV is now with the Cordell Partners search team. If there is a fit, we will be in touch - always in confidence.</p>' +
+      '<a class="apply-brief" href="#mandates" data-close>Back to mandates</a>' +
+      '</div>';
+  }
+  function escapeHtml(s) { return s.replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  function bindForm() {
+    form = document.getElementById('apply-form');
+    submitBtn = document.getElementById('apply-submit');
+    formMsg = document.getElementById('apply-form-msg');
+    if (!form) return;
+    form.addEventListener('submit', onSubmit);
+  }
+  function onSubmit(e) {
+    e.preventDefault();
+    if (!validate()) {
+      var firstErr = form.querySelector('.afield.has-error input, .afield.has-error select');
+      if (firstErr) firstErr.focus();
+      return;
+    }
+    var applicantName = form.name.value.trim();
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Submitting&hellip;';
+    var data = new FormData(form);
+    fetch(APPLY_ENDPOINT, { method: 'POST', body: data })
+      .then(function (res) { return res.json().then(function (b) { return { status: res.status, body: b }; }); })
+      .then(function (r) {
+        if (r.body && r.body.ok) { showSuccess(applicantName); return; }
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit application <span class="arrow" aria-hidden="true">&rarr;</span>';
+        if (r.body && r.body.fields) {
+          Object.keys(r.body.fields).forEach(function (k) { fieldError(k, r.body.fields[k]); });
+        }
+        formMsg.textContent = (r.body && r.body.error) || 'Something went wrong. Please email info@cordell-partners.com.';
+        formMsg.hidden = false;
+      })
+      .catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit application <span class="arrow" aria-hidden="true">&rarr;</span>';
+        formMsg.textContent = 'We could not reach the application service. Please check your connection, or email info@cordell-partners.com.';
+        formMsg.hidden = false;
+      });
+  }
+  bindForm();
 })();
 </script>
 

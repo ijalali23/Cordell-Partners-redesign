@@ -14,8 +14,13 @@ brand/                Logos and the rose emblem
   emblem-white.png      Rose emblem, white, for dark backgrounds
   emblem-blue.png       Rose emblem, royal blue, for light backgrounds
   team/                 Headshots used on the site + originals
+api/                  Candidate application endpoint (PHP)
+  apply.php             Receives the application + CV, pushes it into Atlas
+  config.sample.php     Copy to config.php and add the Atlas token (git-ignored)
+  test-apply.php        CLI check for the Atlas flow before go-live
 docs/
   audit.html            Review of the previous site + Atlas integration analysis
+  atlas-form.md         How the application form automates into Atlas (deploy guide)
 ```
 
 ## Live mandates (Atlas integration)
@@ -27,7 +32,9 @@ The "Live mandates" section reads Cordell's public Atlas job feed in the visitor
 
 A role published in Atlas appears on the site on the next page load, with no website edit.
 If the feed cannot be reached, a snapshot embedded in the page is shown instead.
-Each role links to its Atlas application page.
+Each role opens an in-page application form that pushes the candidate and CV straight
+into that role's Atlas pipeline (see `docs/atlas-form.md`); the form needs the PHP
+endpoint in `api/` and an Atlas Open API token configured server-side.
 
 The embedded fallback snapshot is refreshed daily from the live feed by
 `.github/workflows/refresh-mandates.yml` (via `scripts/refresh-mandates.py`), so
@@ -50,7 +57,9 @@ Oscar Orellana-Hyder (Co-founder), Cellou Diallo (Senior Consultant), Ikhlas Jal
 - Track-record stats (years / mandates / success rate) need verified figures before launch.
 - Add LinkedIn URLs to the team cards.
 - Replace the raster rose emblem with an SVG for crispness at any size.
-- Wire the contact and CV forms to a backend / Atlas (currently front-end only).
+- Deploy the `api/` endpoint on PHP hosting and add the Atlas token to make the
+  candidate application form live (see `docs/atlas-form.md`). The contact form is
+  still front-end only.
 
 ## Branches & deployment
 

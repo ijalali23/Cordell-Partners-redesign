@@ -1,0 +1,5 @@
+# The real config holds the Atlas API token - never commit it.
+config.php
+
+# Rate-limit state, if enabled.
+*.ratelimit.json
